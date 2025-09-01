@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Rocket, Globe, ShoppingCart, Users, Mail, BarChart3, HandHeart, ArrowRight, Sparkles } from "lucide-react";
+import { Rocket, Globe, ShoppingCart, Users, Mail, BarChart3, HandHeart, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import heroBackground from "@/assets/hero-background.jpg";
+import ThreeBackground from "@/components/ThreeBackground";
 import floatingShapes from "@/assets/floating-shapes.jpg";
 import waitlistWaves from "@/assets/waitlist-waves.jpg";
 const Index = () => {
@@ -68,14 +68,11 @@ const Index = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6" style={{
-      backgroundImage: `url(${heroBackground})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundBlendMode: 'overlay'
-    }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 to-background/60 mx-[600px]" />
+      <section className="relative min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-background via-background/80 to-background/60">
+        {/* 3D Animated Background */}
+        <ThreeBackground />
         
+        {/* Content overlay */}
         <div className="relative z-10 text-center max-w-6xl mx-auto">
           {/* Launch Badge */}
           <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full mb-8 animate-pulse-glow">
@@ -140,7 +137,14 @@ const Index = () => {
       </section>
 
       {/* Value Proposition Section */}
-      <section className="py-24 px-6 relative">
+      <section className="py-24 px-6 relative bg-gradient-to-b from-background/60 to-background"
+        style={{
+          backgroundImage: `url(${waitlistWaves})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundBlendMode: 'overlay'
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
