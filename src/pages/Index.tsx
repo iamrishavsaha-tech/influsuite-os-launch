@@ -68,7 +68,7 @@ const Index = () => {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-background via-background/80 to-background/60">
+      <section className="relative min-h-screen flex items-center justify-center px-6 bg-gradient-to-br from-background via-background/95 to-background/90">
         {/* 3D Animated Background */}
         <ThreeBackground />
         
@@ -137,15 +137,12 @@ const Index = () => {
       </section>
 
       {/* Value Proposition Section */}
-      <section className="py-24 px-6 relative bg-gradient-to-b from-background/60 to-background"
-        style={{
-          backgroundImage: `url(${waitlistWaves})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundBlendMode: 'overlay'
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 px-6 relative bg-gradient-to-b from-background/90 to-background/95">
+        {/* Extend 3D background subtly */}
+        <div className="absolute inset-0 opacity-30">
+          <ThreeBackground />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
               Six Powerful Modules, One Unified Platform
@@ -177,8 +174,12 @@ const Index = () => {
 
 
       {/* Footer */}
-      <footer className="py-12 px-6 border-t border-glass-border">
-        <div className="max-w-7xl mx-auto text-center">
+      <footer className="py-12 px-6 border-t border-glass-border bg-gradient-to-t from-background to-background/95">
+        {/* Subtle 3D background for footer */}
+        <div className="absolute inset-0 opacity-20">
+          <ThreeBackground />
+        </div>
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="mb-6">
             <h3 className="text-2xl font-bold gradient-text mb-2">Influsuite</h3>
             <p className="text-muted-foreground">The Future of Creator Technology</p>
