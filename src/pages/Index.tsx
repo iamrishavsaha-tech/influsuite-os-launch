@@ -102,14 +102,40 @@ const Index = () => {
             powerful platform. Built for influencers who are serious about scaling their business.
           </p>
 
-          {/* CTA Button */}
-          <Button size="lg" className="glass-card interactive-hover text-xl px-12 py-6 neon-border bg-primary text-primary-foreground font-bold" onClick={() => document.getElementById('waitlist')?.scrollIntoView({
-          behavior: 'smooth'
-        })}>
-            <Sparkles className="w-6 h-6 mr-3" />
-            Join the Revolution
-            <ArrowRight className="w-6 h-6 ml-3" />
-          </Button>
+          {/* Waitlist Form */}
+          <div className="glass-card p-8 rounded-3xl max-w-2xl mx-auto">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold mb-4">
+                <span className="neon-text animate-pulse-glow">🚀 Join the Waitlist</span>
+              </h3>
+              <p className="text-lg text-muted-foreground">
+                Be the first to know when Influsuite goes live. Get early access and bonuses.
+              </p>
+            </div>
+
+            <form onSubmit={handleWaitlistSignup} className="flex flex-col sm:flex-row gap-4">
+              <Input 
+                type="email" 
+                placeholder="Enter your email address" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                className="futuristic-input flex-1 h-12 text-lg px-6" 
+                required 
+              />
+              <Button 
+                type="submit" 
+                size="lg" 
+                className="neon-border bg-primary text-primary-foreground px-8 h-12 font-bold interactive-hover"
+              >
+                <Rocket className="w-5 h-5 mr-2" />
+                Get Early Access
+              </Button>
+            </form>
+
+            <p className="text-sm text-muted-foreground mt-4 text-center">
+              Join 10,000+ creators already on the waitlist. No spam, just updates.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -145,40 +171,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Waitlist Section */}
-      <section id="waitlist" className="py-24 px-6 relative" style={{
-      backgroundImage: `url(${waitlistWaves})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundBlendMode: 'overlay'
-    }}>
-        <div className="absolute inset-0 bg-gradient-waitlist opacity-90" />
-        
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <div className="glass-card p-12 rounded-3xl">
-            <div className="mb-8">
-              <h2 className="text-4xl md:text-6xl font-bold mb-6">
-                <span className="neon-text animate-pulse-glow">🚀 Join the Waitlist</span>
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                Be the first to know when Influsuite goes live. Sign up to get early access and bonuses.
-              </p>
-            </div>
-
-            <form onSubmit={handleWaitlistSignup} className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
-              <Input type="email" placeholder="Enter your email address" value={email} onChange={e => setEmail(e.target.value)} className="futuristic-input flex-1 h-14 text-lg px-6" required />
-              <Button type="submit" size="lg" className="neon-border bg-primary text-primary-foreground px-8 h-14 font-bold interactive-hover">
-                <Rocket className="w-5 h-5 mr-2" />
-                Get Early Access
-              </Button>
-            </form>
-
-            <p className="text-sm text-muted-foreground mt-6">
-              Join 10,000+ creators already on the waitlist. No spam, just updates.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="py-12 px-6 border-t border-glass-border">
