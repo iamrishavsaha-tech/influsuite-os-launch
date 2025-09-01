@@ -35,11 +35,11 @@ function MinimalParticles() {
     <Points ref={ref} positions={particles} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
-        color="#00ffff"
-        size={2}
+        color="#1a1a2e"
+        size={1.5}
         sizeAttenuation={true}
         depthWrite={false}
-        opacity={0.6}
+        opacity={0.3}
         blending={THREE.AdditiveBlending}
       />
     </Points>
@@ -70,39 +70,39 @@ function GlowingOrbs() {
 
   return (
     <group>
-      {/* Cyan orb */}
+      {/* Dark navy orb */}
       <mesh ref={orb1} position={[6, 2, -8]}>
         <sphereGeometry args={[0.5, 16, 16]} />
         <meshStandardMaterial
-          color="#00ffff"
+          color="#16213e"
           transparent
-          opacity={0.3}
-          emissive="#00ffff"
-          emissiveIntensity={0.2}
+          opacity={0.2}
+          emissive="#0f3460"
+          emissiveIntensity={0.1}
         />
       </mesh>
       
-      {/* Purple orb */}
+      {/* Dark purple orb */}
       <mesh ref={orb2} position={[-4, -1, -6]}>
         <sphereGeometry args={[0.8, 16, 16]} />
         <meshStandardMaterial
-          color="#ff00ff"
+          color="#1a1a2e"
           transparent
-          opacity={0.25}
-          emissive="#ff00ff"
-          emissiveIntensity={0.15}
+          opacity={0.15}
+          emissive="#16213e"
+          emissiveIntensity={0.08}
         />
       </mesh>
       
-      {/* Green orb */}
+      {/* Dark teal orb */}
       <mesh ref={orb3} position={[2, -3, -10]}>
         <sphereGeometry args={[0.3, 16, 16]} />
         <meshStandardMaterial
-          color="#00ff88"
+          color="#0e4b99"
           transparent
-          opacity={0.4}
-          emissive="#00ff88"
-          emissiveIntensity={0.3}
+          opacity={0.25}
+          emissive="#16213e"
+          emissiveIntensity={0.12}
         />
       </mesh>
     </group>
@@ -117,9 +117,9 @@ export default function ThreeBackground() {
         style={{ background: 'transparent' }}
         dpr={[1, 1.5]}
       >
-        <ambientLight intensity={0.2} />
-        <pointLight position={[5, 5, 5]} intensity={0.3} color="#00ffff" />
-        <pointLight position={[-5, -5, 5]} intensity={0.2} color="#ff00ff" />
+        <ambientLight intensity={0.1} />
+        <pointLight position={[5, 5, 5]} intensity={0.15} color="#16213e" />
+        <pointLight position={[-5, -5, 5]} intensity={0.1} color="#1a1a2e" />
         
         <MinimalParticles />
         <GlowingOrbs />
