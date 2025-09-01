@@ -167,7 +167,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="mb-6">
             <h3 className="text-2xl font-bold gradient-text mb-2">Influsuite</h3>
-            <p className="text-muted-foreground">The Creator Hub</p>
+            <p className="text-muted-foreground">   The All-In-One Creators Hub</p>
           </div>
           <p className="text-sm text-muted-foreground">
             © 2024 Influsuite. All rights reserved. Built for the next generation of creators.
