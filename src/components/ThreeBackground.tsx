@@ -1,92 +1,120 @@
 import { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial } from '@react-three/drei';
+import { Points, PointMaterial, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-function AnimatedStars() {
+function AnimatedParticles() {
   const ref = useRef<THREE.Points>(null);
   
-  const sphere = useMemo(() => {
-    const positions = new Float32Array(2000 * 3);
+  const particles = useMemo(() => {
+    const positions = new Float32Array(3000 * 3);
+    const colors = new Float32Array(3000 * 3);
+    
     for (let i = 0; i < positions.length; i += 3) {
-      const radius = Math.random() * 25 + 5;
-      const phi = Math.acos(-1 + (2 * Math.random()));
-      const theta = Math.random() * Math.PI * 2;
+      // Create a more spread out particle field
+      positions[i] = (Math.random() - 0.5) * 40;
+      positions[i + 1] = (Math.random() - 0.5) * 40;
+      positions[i + 2] = (Math.random() - 0.5) * 40;
       
-      positions[i] = radius * Math.sin(phi) * Math.cos(theta);
-      positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      positions[i + 2] = radius * Math.cos(phi);
+      // Create color variation between cyan and purple
+      const t = Math.random();
+      colors[i] = t; // R
+      colors[i + 1] = 0.5 + t * 0.5; // G
+      colors[i + 2] = 1; // B
     }
-    return positions;
+    
+    return { positions, colors };
   }, []);
 
   useFrame((state) => {
     if (ref.current) {
-      ref.current.rotation.x = state.clock.elapsedTime * 0.05;
-      ref.current.rotation.y = state.clock.elapsedTime * 0.1;
+      ref.current.rotation.x = state.clock.elapsedTime * 0.02;
+      ref.current.rotation.y = state.clock.elapsedTime * 0.03;
+      
+      // Animate particles individually
+      const positions = ref.current.geometry.attributes.position.array as Float32Array;
+      for (let i = 0; i < positions.length; i += 3) {
+        positions[i + 1] += Math.sin(state.clock.elapsedTime + positions[i]) * 0.01;
+      }
+      ref.current.geometry.attributes.position.needsUpdate = true;
     }
   });
 
   return (
-    <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false}>
-        <PointMaterial
-          transparent
-          color="#00ffff"
-          size={0.5}
-          sizeAttenuation={true}
-          depthWrite={false}
-        />
-      </Points>
+    <Points ref={ref} positions={particles.positions} colors={particles.colors} stride={3} frustumCulled={false}>
+      <PointMaterial
+        transparent
+        vertexColors
+        size={1.5}
+        sizeAttenuation={true}
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+      />
+    </Points>
+  );
+}
+
+function WaveGeometry() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      const geometry = meshRef.current.geometry as THREE.PlaneGeometry;
+      const positionAttribute = geometry.attributes.position;
+      
+      for (let i = 0; i < positionAttribute.count; i++) {
+        const x = positionAttribute.getX(i);
+        const y = positionAttribute.getY(i);
+        const z = Math.sin(x * 0.1 + state.clock.elapsedTime) * 
+                 Math.cos(y * 0.1 + state.clock.elapsedTime) * 0.5;
+        positionAttribute.setZ(i, z);
+      }
+      positionAttribute.needsUpdate = true;
+      
+      meshRef.current.rotation.z = state.clock.elapsedTime * 0.1;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={[0, 0, -10]} rotation={[-Math.PI / 4, 0, 0]}>
+      <planeGeometry args={[20, 20, 50, 50]} />
+      <meshStandardMaterial
+        color="#00ffff"
+        transparent
+        opacity={0.1}
+        wireframe
+        side={THREE.DoubleSide}
+      />
+    </mesh>
+  );
+}
+
+function FloatingRings() {
+  const group = useRef<THREE.Group>(null);
+  
+  useFrame((state) => {
+    if (group.current) {
+      group.current.rotation.x = state.clock.elapsedTime * 0.1;
+      group.current.rotation.y = state.clock.elapsedTime * 0.15;
+      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 2;
+    }
+  });
+
+  return (
+    <group ref={group}>
+      {[...Array(3)].map((_, i) => (
+        <mesh key={i} position={[0, 0, -i * 3]} rotation={[0, 0, i * Math.PI / 3]}>
+          <torusGeometry args={[3 + i, 0.1, 8, 32]} />
+          <meshStandardMaterial
+            color={i === 0 ? "#ff00ff" : i === 1 ? "#00ffff" : "#00ff88"}
+            transparent
+            opacity={0.6}
+            emissive={i === 0 ? "#ff00ff" : i === 1 ? "#00ffff" : "#00ff88"}
+            emissiveIntensity={0.2}
+          />
+        </mesh>
+      ))}
     </group>
-  );
-}
-
-function FloatingGeometry() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime * 0.2;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3;
-      meshRef.current.position.y = Math.sin(state.clock.elapsedTime) * 0.5;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef} position={[3, 0, -5]}>
-      <icosahedronGeometry args={[1, 1]} />
-      <meshStandardMaterial
-        color="#ff00ff"
-        transparent
-        opacity={0.6}
-        wireframe
-      />
-    </mesh>
-  );
-}
-
-function SecondFloatingGeometry() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = -state.clock.elapsedTime * 0.15;
-      meshRef.current.rotation.z = state.clock.elapsedTime * 0.25;
-      meshRef.current.position.y = Math.cos(state.clock.elapsedTime * 0.8) * 0.3;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef} position={[-4, 1, -8]}>
-      <octahedronGeometry args={[1.2]} />
-      <meshStandardMaterial
-        color="#00ff88"
-        transparent
-        opacity={0.4}
-        wireframe
-      />
-    </mesh>
   );
 }
 
@@ -94,16 +122,21 @@ export default function ThreeBackground() {
   return (
     <div className="absolute inset-0 w-full h-full">
       <Canvas
-        camera={{ position: [0, 0, 1], fov: 75 }}
+        camera={{ position: [0, 0, 8], fov: 60 }}
         style={{ background: 'transparent' }}
+        dpr={[1, 2]}
       >
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={0.8} color="#00ffff" />
-        <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff00ff" />
+        <ambientLight intensity={0.3} />
+        <pointLight position={[10, 10, 10]} intensity={1} color="#00ffff" />
+        <pointLight position={[-10, -10, -10]} intensity={0.8} color="#ff00ff" />
+        <pointLight position={[0, 10, -10]} intensity={0.6} color="#00ff88" />
         
-        <AnimatedStars />
-        <FloatingGeometry />
-        <SecondFloatingGeometry />
+        <AnimatedParticles />
+        <WaveGeometry />
+        <FloatingRings />
+        
+        {/* Add some fog for depth */}
+        <fog attach="fog" args={['#0a0a0f', 10, 50]} />
       </Canvas>
     </div>
   );
