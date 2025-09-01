@@ -3,8 +3,18 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
-function MinimalParticles() {
+interface ThreeBackgroundProps {
+  variant?: 'hero' | 'section' | 'footer';
+}
+
+function MinimalParticles({ variant = 'hero' }: { variant?: 'hero' | 'section' | 'footer' }) {
   const ref = useRef<THREE.Points>(null);
+  
+  const config = {
+    hero: { opacity: 0.3, size: 1.5 },
+    section: { opacity: 0.6, size: 2.2 },
+    footer: { opacity: 0.4, size: 1.8 }
+  }[variant];
   
   const particles = useMemo(() => {
     const positions = new Float32Array(150 * 3);
@@ -36,20 +46,26 @@ function MinimalParticles() {
       <PointMaterial
         transparent
         color="#1a1a2e"
-        size={1.5}
+        size={config.size}
         sizeAttenuation={true}
         depthWrite={false}
-        opacity={0.3}
+        opacity={config.opacity}
         blending={THREE.AdditiveBlending}
       />
     </Points>
   );
 }
 
-function GlowingOrbs() {
+function GlowingOrbs({ variant = 'hero' }: { variant?: 'hero' | 'section' | 'footer' }) {
   const orb1 = useRef<THREE.Mesh>(null);
   const orb2 = useRef<THREE.Mesh>(null);
   const orb3 = useRef<THREE.Mesh>(null);
+  
+  const config = {
+    hero: { opacity: [0.2, 0.15, 0.25], emissive: [0.1, 0.08, 0.12] },
+    section: { opacity: [0.35, 0.25, 0.4], emissive: [0.2, 0.15, 0.25] },
+    footer: { opacity: [0.25, 0.18, 0.3], emissive: [0.15, 0.12, 0.18] }
+  }[variant];
   
   useFrame((state) => {
     if (orb1.current) {
@@ -76,9 +92,9 @@ function GlowingOrbs() {
         <meshStandardMaterial
           color="#16213e"
           transparent
-          opacity={0.2}
+          opacity={config.opacity[0]}
           emissive="#0f3460"
-          emissiveIntensity={0.1}
+          emissiveIntensity={config.emissive[0]}
         />
       </mesh>
       
@@ -88,9 +104,9 @@ function GlowingOrbs() {
         <meshStandardMaterial
           color="#1a1a2e"
           transparent
-          opacity={0.15}
+          opacity={config.opacity[1]}
           emissive="#16213e"
-          emissiveIntensity={0.08}
+          emissiveIntensity={config.emissive[1]}
         />
       </mesh>
       
@@ -100,18 +116,18 @@ function GlowingOrbs() {
         <meshStandardMaterial
           color="#0e4b99"
           transparent
-          opacity={0.25}
+          opacity={config.opacity[2]}
           emissive="#16213e"
-          emissiveIntensity={0.12}
+          emissiveIntensity={config.emissive[2]}
         />
       </mesh>
     </group>
   );
 }
 
-export default function ThreeBackground() {
+export default function ThreeBackground({ variant = 'hero' }: ThreeBackgroundProps) {
   return (
-    <div className="absolute inset-0 w-full h-full">
+    <div className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 50 }}
         style={{ background: 'transparent' }}
@@ -121,8 +137,8 @@ export default function ThreeBackground() {
         <pointLight position={[5, 5, 5]} intensity={0.15} color="#16213e" />
         <pointLight position={[-5, -5, 5]} intensity={0.1} color="#1a1a2e" />
         
-        <MinimalParticles />
-        <GlowingOrbs />
+        <MinimalParticles variant={variant} />
+        <GlowingOrbs variant={variant} />
       </Canvas>
     </div>
   );
