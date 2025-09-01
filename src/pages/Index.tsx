@@ -153,7 +153,7 @@ const Index = () => {
 
           {/* Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => <Card key={index} className="glass-card glass-hover p-8 text-center group">
+            {features.map((feature, index) => <Card key={index} className="glass-card glass-hover p-8 text-center group transition-all duration-300 hover:shadow-[0_0_30px_rgba(26,26,46,0.6)] hover:border-neon-blue/50 active:shadow-[0_0_50px_rgba(26,26,46,0.8)] active:scale-95 cursor-pointer">
                 <div className="mb-6 relative">
                   <div className="w-20 h-20 mx-auto bg-gradient-neon rounded-full flex items-center justify-center group-hover:animate-pulse-glow">
                     <feature.icon className="w-10 h-10 text-background" />
