@@ -33,7 +33,7 @@ const Index = () => {
   }, {
     icon: Users,
     title: "Community & Memberships",
-    description: "Build paid communities with Discord/Telegram integration and member management."
+    description: "Launch and Manage Exclusive communities seamlessly ."
   }, {
     icon: Mail,
     title: "Marketing Automation",
